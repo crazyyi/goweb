@@ -1,0 +1,10 @@
+body {
+  font-family: 'Source Sans Pro', 'Lucida Grande', sans-serif;
+}
+
+div#root {
+  display: block;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+}
