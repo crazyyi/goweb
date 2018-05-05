@@ -27,6 +27,7 @@ func Start(cfg Config, m *model.Model, listener net.Listener) {
 	http.Handle("/people", peopleHandler(m))
 	http.Handle("/create", createNewRecordHandler(m))
 	http.Handle("/delete", deleteRowHandler(m))
+	http.Handle("/update", updateRecordHandler(m))
 	http.Handle("/js/", http.FileServer(cfg.Assets))
 
 	go server.Serve(listener)
@@ -81,24 +82,11 @@ func peopleHandler(m *model.Model) http.Handler {
 
 func createNewRecordHandler(m *model.Model) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Invoke ParseForm or ParseMultipartForm before reading form values
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
 		}
-		log.Println(string(body))
 
-		// r.ParseForm()
-		
-		// for key, values := range r.Form {
-		// 	fmt.Printf("%s = %s \n", key, values)
-		// 	for _, value := range values {
-		// 		fmt.Printf("%s = %s \n", key, value)
-		// 	}
-		// }
-
-		// var firstname = r.FormValue("firstname")
-		// var lastname = r.FormValue("lastname")
 		data := make(map[string]string)
 		err = json.Unmarshal(body, &data)
 		if err != nil {
@@ -132,11 +120,47 @@ func deleteRowHandler(m *model.Model) http.Handler {
 			return
 		}
 
-		fmt.Printf("v = %v\n", v)
+		fmt.Printf("Pressed delete, v = %v\n", v)
 		count, err := m.DeleteRow(v)
 
 		if err != nil {
 			http.Error(w, "This is an error", http.StatusBadRequest)
+			return
+		}
+
+		fmt.Fprintf(w, string(count))
+	})
+}
+
+func updateRecordHandler(m *model.Model) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		data := make(map[string]interface{})
+		err = json.Unmarshal(body, &data)
+		if err != nil {
+			http.Error(w, "Error parsing json object", http.StatusBadRequest)
+			return
+		}
+
+		var id = data["id"].(float64)
+		var firstname = data["firstname"].(string)
+		var lastname = data["lastname"].(string)
+
+		log.Println(firstname + ", " + lastname)
+
+		if err != nil {
+			http.Error(w, "Error parsing int", http.StatusBadRequest)
+			return
+		}
+
+		count, err := m.UpdateRow(int64(id), firstname, lastname)
+
+		if err != nil {
+			http.Error(w, "Error updating row", http.StatusBadRequest)
 			return
 		}
 

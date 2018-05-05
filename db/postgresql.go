@@ -1,6 +1,7 @@
 package db
 
 import (
+	"log"
 	"database/sql"
 	"fmt"
 
@@ -21,6 +22,7 @@ type pgDb struct {
 	sqlInsertPerson *sqlx.NamedStmt
 	sqlSelectPerson *sql.Stmt
 	sqlDeletePerson *sql.Stmt
+	sqlUpdatePerson *sql.Stmt
 }
 
 func InitDb(cfg Config) (*pgDb, error) {
@@ -85,6 +87,12 @@ func (p *pgDb) prepareSQLStatements() (err error) {
 		return err
 	}
 
+	if p.sqlUpdatePerson, err = p.dbConn.Prepare(
+		"UPDATE people SET first = $2, last = $3 WHERE id = $1",
+	); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -115,7 +123,22 @@ func (p *pgDb) DeleteRowAt(id int64) (int64, error) {
 	}
 
 	count, err := res.RowsAffected()
-	fmt.Printf("count = %d\n", count)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return count, nil
+}
+
+func (p *pgDb) UpdateRowAt(id int64, firstname string, lastname string) (int64, error) {
+	res, err := p.sqlUpdatePerson.Exec(id, firstname, lastname)
+
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := res.RowsAffected()
 
 	if err != nil {
 		panic(err)

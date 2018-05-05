@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 
 class DataForm extends Component {
   constructor() {
@@ -33,7 +32,7 @@ class DataForm extends Component {
 
   render() {
     return (
-      <div>
+      <div className="dataform">
         <form onSubmit={this.handleSubmit}>
           <label>
             Firstname: 

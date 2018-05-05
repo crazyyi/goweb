@@ -1,10 +1,80 @@
 body {
   font-family: 'Source Sans Pro', 'Lucida Grande', sans-serif;
+  background-color: bisque;
 }
 
-div#root {
+div {
   display: block;
-  position: absolute;
-  top: 20%;
-  left: 20%;
+  margin: 0 auto;
+  padding-top: 20px;
+  text-align: center;
 }
+
+div table {
+  padding-top: 50px;
+  margin: 0 auto;
+}
+
+div table:hover {
+  cursor: default;
+}
+
+div table tr:nth-child(odd) {
+  background-color:#e6e6fa;
+}
+
+div table tr:nth-child(even) {
+  background-color:#bfdef4;
+}
+
+div table tr {
+  width: 200px;
+}
+
+div table tr td {
+  font-size: 1.18em;
+}
+
+div table tr td:nth-child(n + 2) {
+  width: 300px;
+}
+
+div table tr td:last-child {
+  width: 80px;
+}
+
+div table tr td:last-child:hover {
+  cursor: pointer;
+}
+
+div table tr:hover {
+  background-color: #fffff3;
+}
+
+div table tr td:nth-last-child(2) {
+  width: 80px;
+}
+
+div table tr td:nth-last-child(2):hover {
+  cursor: pointer;
+}
+
+div.editDiv {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+div.editDiv svg {
+  transform: translateY(-60%);
+}
+
+div.deleteDiv svg {
+  transform: translateY(-60%);
+}
+
+input.editInput {
+  width: 180px;
+  height: 26px;
+  font-size: 1.15em;
+}
+

@@ -8,7 +8,9 @@
     "start": "npm run app.js"
   },
   "dependencies": {
-    "qs": "^6.5.1",
+    "@fortawesome/fontawesome": "^1.1.5",
+    "@fortawesome/fontawesome-free-solid": "^5.0.10",
+    "@fortawesome/react-fontawesome": "^0.0.18",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
   },
